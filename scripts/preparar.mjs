@@ -20,6 +20,33 @@ const HF = 'hyperframes@0.8.86';
 let ok = true;
 const bien = (m) => console.log('  ✔ ' + m);
 const mal = (m) => { ok = false; console.log('  ✖ ' + m); };
+// Descarga con reintentos a un archivo temporal: si se corta, no queda un archivo a medias.
+async function descargar(url, destino, etiqueta) {
+  fs.mkdirSync(path.dirname(destino), { recursive: true });
+  for (let intento = 1; intento <= 3; intento++) {
+    try {
+      const r = await fetch(url, { redirect: 'follow' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const total = +r.headers.get('content-length') || 0;
+      const tmp = destino + '.parcial';
+      const f = fs.createWriteStream(tmp);
+      let bajado = 0, aviso = 0;
+      for await (const trozo of r.body) {
+        f.write(trozo);
+        bajado += trozo.length;
+        if (total && bajado / total >= aviso + 0.25) { aviso += 0.25; process.stdout.write(`    ${etiqueta}: ${Math.round(bajado / total * 100)}%\n`); }
+      }
+      await new Promise((ok, mal) => f.end((e) => (e ? mal(e) : ok())));
+      if (total && fs.statSync(tmp).size !== total) throw new Error('descarga incompleta');
+      fs.renameSync(tmp, destino);
+      return true;
+    } catch (e) {
+      console.log(`    ${etiqueta}: intento ${intento} falló (${e.message})${intento < 3 ? ', reintento…' : ''}`);
+    }
+  }
+  return false;
+}
+
 // El shell solo hace falta para npx en Windows (es un .cmd); con él, los argumentos con espacios se rompen.
 const corre = (cmd, args) => spawnSync(cmd, args, { encoding: 'utf8', shell: win && cmd === 'npx' });
 
@@ -69,7 +96,9 @@ if (fs.existsSync(py)) {
     console.log(`  … instalando ${faltan.join(', ')} (puede tardar unos minutos)`);
     execFileSync(py, ['-m', 'pip', 'install', '-q', ...faltan], { stdio: 'inherit' });
   }
-  bien('Transcripción: faster-whisper listo');
+  // El modelo de transcripción (~480 MB) se baja ahora: si no, la primera transcripción se queda «pegada» descargando.
+  const w = corre(py, ['-c', "from faster_whisper import WhisperModel; WhisperModel('small', device='cpu', compute_type='int8'); print('ok')"]);
+  w.status === 0 ? bien('Transcripción: faster-whisper y su modelo listos') : mal('No pude bajar el modelo de transcripción (faster-whisper «small»): revisa tu conexión y vuelve a correr este script');
   if (conRecortes) {
     // El modelo (~180 MB) se baja ahora para que el primer recorte no tarde.
     const modelo = path.join(os.homedir(), '.rembg', 'models', 'isnet-general-use', 'isnet-general-use.onnx');
@@ -81,16 +110,21 @@ if (fs.existsSync(py)) {
     bien('Quitar fondos de imágenes: rembg listo (scripts/recortar.py)');
   }
   if (conVoz) {
-    // El modelo de voz (~350 MB) lo descarga HyperFrames la primera vez que habla; voz.py lo reutiliza.
+    // Modelo de voz Kokoro (~350 MB), del proyecto oficial kokoro-onnx. Se guarda donde también lo usa
+    // HyperFrames, así voz.py y «hyperframes tts» comparten los mismos archivos.
     const cache = path.join(os.homedir(), '.cache', 'hyperframes', 'tts');
-    if (!fs.existsSync(path.join(cache, 'voices', 'voices-v1.0.bin'))) {
-      console.log('  … descargando el modelo de voz (una sola vez, ~350 MB)');
-      const tmp = path.join(os.tmpdir(), 'reels-hola.wav');
-      spawnSync('npx', ['-y', HF, 'tts', 'hola', '-v', 'ef_dora', '-o', tmp], { stdio: 'inherit', shell: win, env: { ...process.env, HYPERFRAMES_PYTHON: py } });
+    const BASE = 'https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/';
+    const archivos = [['models', 'kokoro-v1.0.onnx', 'modelo de voz (~310 MB)'], ['voices', 'voices-v1.0.bin', 'voces (~27 MB)']];
+    let vozOk = true;
+    for (const [carpeta, nombre, etiqueta] of archivos) {
+      const destino = path.join(cache, carpeta, nombre);
+      if (fs.existsSync(destino) && fs.statSync(destino).size > 1e6) continue;
+      console.log(`  … descargando ${etiqueta}, una sola vez`);
+      if (!(await descargar(BASE + nombre, destino, etiqueta))) vozOk = false;
     }
-    fs.existsSync(path.join(cache, 'voices', 'voices-v1.0.bin'))
+    vozOk
       ? bien('Voz IA local: dora, alex y santa listas (scripts/voz.py)')
-      : mal('No se pudo descargar el modelo de voz: revisa tu conexión y vuelve a correr preparar.mjs');
+      : mal(`No se pudo descargar la voz. Revisa tu conexión y vuelve a correr este script, o baja a mano ${BASE}kokoro-v1.0.onnx a ${path.join(cache, 'models')} y ${BASE}voices-v1.0.bin a ${path.join(cache, 'voices')}`);
   }
 }
 
