@@ -29,10 +29,9 @@ Referencias (léelas cuando toque, no antes):
 ## 0 · Preparar la máquina (una sola vez)
 
 ```bash
-node <skill>/scripts/preparar.mjs --voz    # Node 22+, ffmpeg, HyperFrames, transcripción y voces IA en español
-node <skill>/scripts/preparar.mjs --recortes   # opcional: quitar fondos de imágenes (estilos monocromo y cine)
+node <skill>/scripts/preparar.mjs          # Node 22+, ffmpeg, HyperFrames y su navegador, transcripción, voces IA y quitar fondos
 ```
-Si algo sale con ✖, explícale al usuario cómo instalarlo en su sistema y no sigas hasta que esté listo.
+Si algo sale con ✖, explícale al usuario cómo instalarlo en su sistema y no sigas hasta que esté listo. Usa siempre `npx hyperframes@0.8.86` (la versión probada con esta skill), no `npx hyperframes` a secas.
 
 ## 1 · Marca (solo la primera vez)
 
@@ -115,9 +114,9 @@ Whisper a veces no escribe las muletillas («eh», «mmm»): las omite y deja un
 
 **Revisa la transcripción**: lee el texto que imprimen los scripts y corrige en `palabras.json` los nombres propios y términos que salieron mal. Si un error se repite, agrégalo al `glosario` de la marca. No toques los tiempos, salvo para unir palabras que se separaron (por ejemplo, «a Mateur» → «amateur»: toma el `start` de la primera y el `end` de la última). Los `id` no importan.
 
-## 4½ · Imágenes (monocromo y cine)
+## 4½ · Imágenes del creador
 
-Estos estilos se apoyan en imágenes: casi una por escena en monocromo y 3-5 íconos en cine. Pídeselas al creador con una **lista numerada** (A1, A2… o B1…) que diga en qué frase va cada una y qué tipo de imagen funciona (recortes de fotos u objetos 3D con buena luz; los íconos planos se ven pobres). Mientras llegan, arma el reel con lo que haya: en monocromo, sin imagen se queda la grabación o el texto solo.
+**Siempre que el creador comparta imágenes** (fotos de su producto, de su equipo, de su local, logos, objetos), quítales el fondo con `recortar.py` antes de usarlas: así su reel queda personalizado con sus propias cosas. Los estilos monocromo y cine se apoyan en ellas: casi una por escena en monocromo y 3-5 íconos en cine. Pídeselas al creador con una **lista numerada** (A1, A2… o B1…) que diga en qué frase va cada una y qué tipo de imagen funciona (recortes de fotos u objetos 3D con buena luz; los íconos planos se ven pobres). Mientras llegan, arma el reel con lo que haya: en monocromo, sin imagen se queda la grabación o el texto solo.
 
 Casi ninguna imagen llega sin fondo. Quítaselo con:
 ```bash
@@ -144,24 +143,24 @@ Con la transcripción a la vista, decide qué pasa en pantalla y cuándo, usando
 Luego arma y revisa:
 ```bash
 node <skill>/scripts/armar.mjs
-npx hyperframes check                     # debe decir "Check passed"
+npx hyperframes@0.8.86 check                     # debe decir "Check passed"
 ```
 Atiende los avisos (⚠) de `armar`. `check` detecta textos encimados o fuera del cuadro. El aviso `composition_file_too_large` sale siempre, porque el motor va incrustado en `index.html`: ignóralo. Corrige en `reel.js`, vuelve a armar y repite hasta que pase.
 
 ## 6 · Mirar antes de mostrar (obligatorio)
 
 ```bash
-npx hyperframes snapshot --at <t1>,<t2>,...     # un instante en la mitad de cada momento, más el gancho y el cierre
+npx hyperframes@0.8.86 snapshot --at <t1>,<t2>,...     # un instante en la mitad de cada momento, más el gancho y el cierre
 ```
 Pide todos los instantes en una sola llamada: cada `snapshot` borra los anteriores y agrega por su cuenta un cuadro cerca del final. Mira la hoja de contacto (`snapshots/contact-sheet.jpg`; con 9 cuadros o más, `contact-sheet-1.jpg`, `-2.jpg`…) con Read y repasa `references/errores.md`. Busca textos cortados o encimados, tarjetas que choquen con los subtítulos o con otra tarjeta, y cierres vacíos. Corrige y repite.
 
-Después abre la vista previa para el creador con `npx hyperframes preview --background`, dale el enlace y pregúntale qué cambiaría.
+Después abre la vista previa para el creador con `npx hyperframes@0.8.86 preview --background`, dale el enlace y pregúntale qué cambiaría.
 
 ## 7 · Render y entrega
 
 Solo cuando el creador apruebe:
 ```bash
-npx hyperframes render --quality delivery --output renders/borrador.mp4
+npx hyperframes@0.8.86 render --quality delivery --output renders/borrador.mp4
 node <skill>/scripts/entregar.mjs renders/borrador.mp4 --nombre <nombre>
 ```
 `entregar` deja el volumen en −14 LUFS (el de Instagram, TikTok y YouTube), crea una versión liviana y la portada, y revisa pantallas negras, audio y duración. Si marca ✖, corrige antes de entregar. Los ⚠ son sugerencias: un silencio de más de 1.5 s, por ejemplo, se tapa con música. Mira 3 cuadros del MP4 final: `ffmpeg -y -ss <s> -i renders/<nombre>.mp4 -frames:v 1 cuadro-<s>.png` y ábrelos con Read. Entrega:

@@ -19,7 +19,7 @@ Dos estilos de reel sin rostro en los que **el texto de pantalla es la voz**: ca
 3. Transcribe: `python <skill>/scripts/transcribir.py assets/voz.wav` → `palabras.json`.
 4. Escribe las `escenas` en `reel.js` (abajo). **No hace falta poner tiempos**: `armar.mjs` busca cada palabra de pantalla en la voz y saca de ahí cuándo entra cada palabra, cada escena, cada píldora y cada imagen.
 5. `node <skill>/scripts/armar.mjs`: imprime la tabla de escenas con sus tiempos y avisa si alguna palabra de pantalla no aparece en la voz.
-6. `npx hyperframes check`, snapshots, render y `entregar.mjs`, como siempre.
+6. `npx hyperframes@0.8.86 check`, snapshots, render y `entregar.mjs`, como siempre.
 
 ## Escenas
 

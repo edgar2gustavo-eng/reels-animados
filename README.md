@@ -38,15 +38,25 @@
 
 Necesitas [Claude Code](https://claude.com/claude-code), **Node.js 22+**, **ffmpeg** y **Python 3.9+**.
 
+**Mac, Linux o Git Bash:**
 ```bash
 git clone https://github.com/edgar2gustavo-eng/reels-animados ~/.claude/skills/reels-animados
-node ~/.claude/skills/reels-animados/scripts/preparar.mjs --voz
+node ~/.claude/skills/reels-animados/scripts/preparar.mjs
 ```
 
-`preparar.mjs` revisa lo que falta y crea un entorno de Python en `~/.reels-animados/` con la transcripción (faster-whisper) y las voces (Kokoro, ~350 MB la primera vez). Para instalar ffmpeg: `winget install ffmpeg` en Windows o `brew install ffmpeg` en Mac.
+**Windows (PowerShell):**
+```powershell
+git clone https://github.com/edgar2gustavo-eng/reels-animados "$HOME\.claude\skills\reels-animados"
+node "$HOME\.claude\skills\reels-animados\scripts\preparar.mjs"
+```
+
+**O pídeselo a Claude Code:** *«Instala la skill https://github.com/edgar2gustavo-eng/reels-animados en mi carpeta de skills y corre su preparar.mjs»*.
+
+Después, **reinicia Claude Code** para que cargue la skill.
+
+`preparar.mjs` revisa lo que falta y crea un entorno de Python en `~/.reels-animados/` con la transcripción (faster-whisper), las voces (Kokoro, ~350 MB), el recorte de fondos de imágenes (rembg, ~180 MB) y el navegador con el que HyperFrames renderiza (~100 MB). Todo se descarga una sola vez. Si no quieres alguna parte: `--sin-voz` o `--sin-recortes`. Para instalar ffmpeg: `winget install ffmpeg` en Windows o `brew install ffmpeg` en Mac.
 
 Opcional:
-- **Quitar fondos de imágenes**: `node ~/.claude/skills/reels-animados/scripts/preparar.mjs --recortes` (rembg; el modelo, ~180 MB, se baja la primera vez que recortas).
 - **Música con Suno**: crea tu llave en [sunoapi.org](https://sunoapi.org) y guárdala en `~/.reels-animados/keys.env` como `SUNO_API_KEY=...`. Nunca la pegues en el chat ni la subas a un repositorio. Las pistas quedan en `~/.reels-animados/musica/` y sus derechos dependen de tu plan de Suno.
 
 ## Usar
@@ -57,6 +67,8 @@ Abre Claude Code en una carpeta (mejor si no está sincronizada con OneDrive, iC
 - *«Tengo este audio (`idea.m4a`): límpialo, quítale las muletillas y anímalo»*
 - *«Ponle subtítulos estilo pop a mi video `grabacion.mp4` y quítale los silencios»*
 - *«El mismo reel, pero con subtítulos estilo caja y la voz de Dora»*
+- *«Te paso fotos de mis productos: quítales el fondo y haz un reel en estilo monocromo con ellas»*
+- *«Saca el mejor minuto de este podcast (`episodio.mp4`) y hazlo un reel de 30 segundos con subtítulos»*
 
 La primera vez, Claude te pregunta por tu marca y la guarda para siempre en `~/.reels-animados/marca.json`.
 

@@ -33,10 +33,13 @@
 - **Editar `index.html` a mano.** Se pierde en el siguiente `armar.mjs`. Todo va en `reel.js`, o en `motor/` si es un cambio de diseño.
 - **Aviso de contraste en `check`.** Cuando la palabra activa pasa sobre el fondo del mismo color, `check` puede marcar contraste bajo porque mide el relleno y no el contorno negro. Mira la captura: si se lee, está bien. Si no se lee, usa `caja` o cambia el color `suave`.
 - **Video sin audio en el render.** `armar.mjs` detecta si la grabación tiene audio y la marca con `data-has-audio`. Si el render sale mudo, revisa `ffprobe assets/grabacion.mp4`.
-- **La transcripción de HyperFrames (`npx hyperframes transcribe`) necesita whisper.cpp**, que en Windows no viene instalado. Por eso el skill usa `transcribir.py` con faster-whisper.
-- **Voz IA: usa `voz.py`, no `npx hyperframes tts`.** El de HyperFrames solo ofrece la voz femenina (Dora) y necesita `HYPERFRAMES_PYTHON`; `voz.py` usa el mismo modelo, suma las voces masculinas (Alex, Santa) y hace pausas naturales entre frases.
+- **La transcripción de HyperFrames (`npx hyperframes@0.8.86 transcribe`) necesita whisper.cpp**, que en Windows no viene instalado. Por eso el skill usa `transcribir.py` con faster-whisper.
+- **Voz IA: usa `voz.py`, no `npx hyperframes@0.8.86 tts`.** El de HyperFrames solo ofrece la voz femenina (Dora) y necesita `HYPERFRAMES_PYTHON`; `voz.py` usa el mismo modelo, suma las voces masculinas (Alex, Santa) y hace pausas naturales entre frases.
 - **`text_occluded` por la viñeta** (monocromo y cine). Una viñeta hecha con un `div` encima de todo hace que `check` crea que tapa el texto. Ya va en `#root::after`, que se ve igual y no cuenta como elemento.
 - **`subtitulos: false` no quitaba los subtítulos.** Ya se corrigió en `motor.js`.
+- **«Failed to launch the browser process» en `check` o `render`.** HyperFrames renderiza con su propio Chrome, que se baja aparte. `preparar.mjs` lo instala (`npx hyperframes@0.8.86 browser ensure`); si falla o quedó a medias, corre `npx hyperframes@0.8.86 browser ensure --force`.
+- **«Chrome cannot start … (ENOENT)» aunque el navegador está descargado.** En Windows, si la carpeta de usuario está en una ruta muy larga, la ruta al navegador pasa de 260 caracteres y Windows no lo encuentra. Pasa en carpetas de prueba anidadas, no en `C:\Users\<nombre>`. Solución: una carpeta más corta, o activar las rutas largas de Windows.
+- **Versión de HyperFrames.** La skill está probada con la 0.8.86 y la usa fija (`npx hyperframes@0.8.86`). HyperFrames saca versiones seguido y alguna puede cambiar reglas de `check` o del render: para subir de versión, cámbiala en `preparar.mjs`, `SKILL.md` y las referencias, y prueba un reel de cada estilo antes de publicar.
 - **Proyectos dentro de OneDrive, iCloud o Dropbox.** La sincronización bloquea archivos durante el render. Crea los proyectos en una carpeta local.
 
 ## Audio

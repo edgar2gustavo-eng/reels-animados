@@ -127,7 +127,7 @@ Para sumar un objeto nuevo: una función en `FABRICA` dentro de `motor/objetos3d
 
 ## Revisión
 
-`armar.mjs` → `npx hyperframes check` → `snapshot` en la mitad de cada escena. Revisa que:
+`armar.mjs` → `npx hyperframes@0.8.86 check` → `snapshot` en la mitad de cada escena. Revisa que:
 - los objetos no tapen el texto;
 - nada toque los bordes (la columna deja 9 % a los lados y 12 % arriba y abajo);
 - las escenas con `desplazar` no dejen un hueco.
