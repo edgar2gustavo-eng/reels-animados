@@ -1,0 +1,10 @@
+{
+  "nombre": "Ana Fotografía",
+  "usuario": "@anafoto",
+  "colores": { "fondo": "#141414", "texto": "#FFFFFF", "acento": "#FF5A36", "suave": "#FFC2B3" },
+  "fuentes": { "titulo": "Archivo Black", "texto": "Inter" },
+  "logo": "",
+  "subtitulos": "pop",
+  "cta": { "texto": "Sígueme para *más trucos*", "accion": "seguir" },
+  "glosario": { "ana foto": "Ana Foto", "light room": "Lightroom" }
+}

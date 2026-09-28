@@ -1,0 +1,17 @@
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+*-workspace/
+
+# Nunca subir: llaves, música de Suno (derechos del plan de cada usuario), renders ni proyectos de prueba
+keys.env
+*.env
+.env*
+*.mp3
+*.mp4
+!docs/*.mp4
+renders/
+snapshots/
+assets/
+.mezcla/

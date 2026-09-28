@@ -1,0 +1,79 @@
+/* reels-animados · estilos «monocromo» y «cine» (tipografía que sigue a la voz).
+ * Variables que escribe armar.mjs: --acento, --brillo-1, --brillo-2, --tinta, --papel.
+ * Las fuentes llegan como .f-mono (sans gruesa), .f-serif (serif fina) y .f-sans (sans limpia).
+ */
+@font-face { font-family: "Bodoni Moda"; src: url("motor/fuentes/BodoniModa.ttf"); font-weight: 400 900; font-style: normal; font-display: block; }
+@font-face { font-family: "Bodoni Moda"; src: url("motor/fuentes/BodoniModa-Italic.ttf"); font-weight: 400 900; font-style: italic; font-display: block; }
+body { margin: 0; background: #000; }
+#root { position: relative; width: 100%; height: 100%; overflow: hidden; }
+.capa { position: absolute; inset: 0; }
+#vineta, #destello, #negro-final, #crema, #fondo, #adornos { pointer-events: none; }
+#escenas { overflow: hidden; }
+.ci-escena { position: absolute; inset: 0; }
+.ci-texto { position: absolute; left: 7%; right: 7%; display: flex; flex-direction: column; }
+.ci-linea { margin: 0; white-space: nowrap; }
+.ci-palabra { display: inline-block; position: relative; }
+.ci-img { position: absolute; will-change: transform, filter; }
+.ci-img img { display: block; width: 100%; height: auto; }
+.ci-deriva { width: 100%; }
+
+/* ================= monocromo ================= */
+.t-monocromo #root, .t-monocromo { background: #F3F1EC; }
+.t-monocromo #fondo { background:
+    linear-gradient(rgba(0,0,0,.035) 1.5px, transparent 1.5px) 0 0 / 58px 58px,
+    linear-gradient(90deg, rgba(0,0,0,.035) 1.5px, transparent 1.5px) 0 0 / 58px 58px,
+    radial-gradient(60% 42% at 50% 44%, #FBFAF7 0%, #F1EFEA 60%, #E6E3DC 100%); }
+.t-monocromo #root::after { content: ""; position: absolute; inset: 0; pointer-events: none; background:
+    radial-gradient(ellipse 78% 62% at 50% 46%, rgba(0,0,0,0) 52%, rgba(40,38,36,.32) 82%, rgba(20,19,18,.62) 100%),
+    linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,0) 12%, rgba(0,0,0,0) 86%, rgba(0,0,0,.28)); }
+.t-monocromo .ci-texto { align-items: flex-start; }
+.t-monocromo .ci-linea { font-family: var(--f-mono), sans-serif; letter-spacing: -.035em; line-height: .98; }
+.t-monocromo .l-chica { font-weight: 600; color: #3A3A3A; }
+.t-monocromo .l-media { font-weight: 700; color: #1E1E1E; }
+.t-monocromo .l-grande, .t-monocromo .l-gigante { font-weight: 800; color: #151515; }
+.t-monocromo .ci-img img { filter: grayscale(1) contrast(1.12) drop-shadow(0 34px 38px rgba(0,0,0,.34)); }
+.t-monocromo .ci-img.a-color img { filter: drop-shadow(0 34px 38px rgba(0,0,0,.34)); }
+.ci-tachado { position: absolute; left: -4%; right: -4%; top: 54%; height: .075em; background: currentColor; transform-origin: left center; border-radius: 1em; }
+.ci-etiquetas { position: absolute; left: 6%; right: 6%; display: flex; flex-direction: column; align-items: center; }
+.ci-etiqueta { background: #262626; color: #F4F4F4; font-family: var(--f-mono), sans-serif; font-weight: 600; letter-spacing: -.01em;
+  border-radius: .32em; padding: .36em .7em; box-shadow: 0 .5em 1.1em rgba(0,0,0,.28); white-space: nowrap; }
+#logo-fijo { position: absolute; left: 50%; top: 0; transform: translateX(-50%); display: flex; align-items: center; gap: .35em; color: #151515;
+  font-family: var(--f-mono), sans-serif; font-weight: 800; letter-spacing: -.02em; white-space: nowrap; }
+#logo-fijo img { height: 1.35em; width: auto; filter: grayscale(1) contrast(1.2); }
+.ci-adorno { position: absolute; filter: grayscale(1) contrast(1.1); opacity: .95; }
+#destello { opacity: 0; }
+#oscuro { opacity: 0; background: radial-gradient(70% 50% at 50% 46%, #2A2624 0%, #151312 55%, #0B0A0A 100%); }
+.ci-cierre { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #F4F2EE; text-align: center; }
+.ci-cierre .c-logo { height: 1em; width: auto; margin-bottom: .25em; }
+.ci-cierre .c-nombre { font-family: var(--f-mono), sans-serif; font-weight: 800; letter-spacing: -.03em; line-height: 1; white-space: nowrap; }
+.ci-cierre .c-nombre b { color: var(--acento-claro); font-weight: 800; }
+.ci-cierre .c-lema { font-family: var(--f-mono), sans-serif; font-weight: 500; opacity: .85; margin-top: .6em; }
+.ci-cierre .c-web { position: absolute; bottom: 5.5%; font-family: var(--f-mono), sans-serif; font-weight: 500; opacity: .7; }
+.ci-letra { display: inline-block; }
+
+/* ================= cine ================= */
+.t-cine #root, .t-cine { background: #050505; }
+.t-cine #fondo { background: radial-gradient(80% 55% at 50% 40%, #121110 0%, #050505 70%); }
+.t-cine #crema { opacity: 0; background: radial-gradient(75% 55% at 50% 45%, #FBF8F1 0%, #EFEAE0 62%, #DEDAD1 100%); }
+.t-cine #crema::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 14%; background: linear-gradient(180deg, rgba(0,0,0,0), rgba(60,58,54,.35)); }
+.t-cine #root::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 85% 70% at 50% 45%, rgba(0,0,0,0) 60%, rgba(0,0,0,.45) 100%); }
+.t-cine .ci-texto { align-items: center; text-align: center; }
+.t-cine .ci-linea { font-family: "Bodoni Moda", serif; font-weight: 400; font-variation-settings: "opsz" 96; color: #F3EFE6; letter-spacing: -.02em; line-height: .8; }
+.t-cine .ci-linea.l-sans { font-family: var(--f-sans), sans-serif; font-weight: 400; font-variation-settings: normal; letter-spacing: -.02em; line-height: 1.05; }
+.t-cine .ci-linea.l-cursiva { font-style: italic; }
+.t-cine .en-crema .ci-linea { color: #121212; }
+.ci-brilla { color: var(--c-brillo); text-shadow: 0 0 .12em var(--c-brillo), 0 0 .45em color-mix(in srgb, var(--c-brillo) 70%, transparent), 0 0 1.1em color-mix(in srgb, var(--c-brillo) 40%, transparent); }
+.ci-halo { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0; pointer-events: none; }
+.t-cine .ci-img img { filter: drop-shadow(0 0 18px color-mix(in srgb, var(--c-brillo, #fff) 80%, transparent)) drop-shadow(0 0 60px color-mix(in srgb, var(--c-brillo, #fff) 45%, transparent)); }
+.t-cine .ci-img.sin-brillo img { filter: drop-shadow(0 24px 30px rgba(0,0,0,.35)); }
+.ci-trazo { position: absolute; left: -6%; width: 112%; height: .5em; top: 82%; overflow: visible; }
+.ci-trazo path { fill: none; stroke: var(--c-brillo); stroke-width: 5; stroke-linecap: round; filter: drop-shadow(0 0 6px var(--c-brillo)); }
+.ci-aspa { position: absolute; background: #0C0C0C; border-radius: 6px; }
+#negro-final { opacity: 0; background: #000; }
+
+/* ---------- grabación en tarjeta (con video) ---------- */
+#tv { position: absolute; overflow: hidden; border-radius: 34px; background: #111;
+  box-shadow: 0 40px 70px rgba(0,0,0,.32), 0 8px 18px rgba(0,0,0,.18); will-change: transform, filter, opacity; }
+#tv video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.t-monocromo #tv video { filter: grayscale(1) contrast(1.12) brightness(1.03); }
+.t-monocromo #tv.a-color video { filter: none; }

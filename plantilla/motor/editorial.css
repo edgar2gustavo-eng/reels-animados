@@ -1,0 +1,79 @@
+/* reels-animados · modo editorial: papel claro, tipografía mezclada y objetos 3D.
+ * Variables que escribe armar.mjs: --papel, --linea, --tinta, --gris, --acento, --acento-tinta,
+ * --sobre-acento, --suave. Las fuentes llegan como .f-titulo y .f-editorial.
+ */
+body { margin: 0; background: var(--papel); }
+#root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--papel); }
+.capa { position: absolute; inset: 0; }
+.f-editorial { font-family: "Playfair Display", serif; }
+
+/* ---------- papel ---------- */
+#papel.cuadriculado { background:
+    radial-gradient(70% 45% at 50% 42%, rgba(255,255,255,.75), rgba(255,255,255,0) 70%),
+    linear-gradient(var(--linea) 1.5px, transparent 1.5px) 0 0 / 64px 64px,
+    linear-gradient(90deg, var(--linea) 1.5px, transparent 1.5px) 0 0 / 64px 64px,
+    var(--papel); }
+#papel.puntos { background:
+    radial-gradient(70% 45% at 50% 42%, rgba(255,255,255,.75), rgba(255,255,255,0) 70%),
+    radial-gradient(var(--linea) 2.5px, transparent 3px) 0 0 / 48px 48px,
+    var(--papel); }
+#papel.liso { background: radial-gradient(70% 45% at 50% 42%, rgba(255,255,255,.8), rgba(255,255,255,0) 70%), var(--papel); }
+#vineta { background: linear-gradient(180deg, rgba(0,0,0,.05), transparent 18%, transparent 82%, rgba(0,0,0,.07)); }
+#curvas path { fill: none; stroke: color-mix(in srgb, var(--linea) 85%, #000 8%); stroke-linecap: round; }
+#lienzo3d { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* ---------- escenas y columna ---------- */
+.ed-escena { position: absolute; inset: 0; }
+.ed-columna { position: absolute; left: 9%; right: 9%; top: 12%; bottom: 12%; display: flex; flex-direction: column; gap: 14px; }
+.ed-v-centro { justify-content: center; }
+.ed-v-arriba { justify-content: flex-start; }
+.ed-v-abajo { justify-content: flex-end; }
+.ed-bloque { margin: 0; flex: 0 0 auto; }
+.ed-texto { line-height: 1.02; max-width: 100%; }
+.ed-cursiva { font-family: "Playfair Display", serif; font-style: italic; font-weight: 500; color: var(--tinta); letter-spacing: -.01em; }
+.ed-fuerte { font-weight: 800; color: var(--tinta); letter-spacing: -.035em; line-height: .98; }
+.ed-condensada { font-family: "League Gothic", sans-serif; font-weight: 400; color: var(--tinta); text-transform: uppercase; line-height: .92; letter-spacing: .005em; }
+.ed-en-fuerte { font-style: normal; font-weight: 800; letter-spacing: -.035em; }
+.ed-en-acento { font-style: inherit; color: var(--acento-tinta); }
+.ed-palabra { display: inline-block; }
+
+/* tarjeta de color (gancho tipo "¿Sabías que…?") */
+.ed-tarjeta { align-self: center; display: flex; flex-direction: column; gap: 6px; padding: 70px 76px 80px; border-radius: 64px;
+  background: var(--acento); box-shadow: 0 40px 80px color-mix(in srgb, var(--acento) 30%, transparent); }
+.ed-tarjeta .ed-texto { color: var(--sobre-acento); }
+.ed-tarjeta .ed-en-acento { color: var(--suave); }
+
+/* hueco para un objeto 3D, con aro punteado opcional */
+.ed-hueco { position: relative; width: 100%; }
+.ed-aro { position: absolute; left: 50%; top: 50%; translate: -50% -50%; }
+.ed-aro svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.ed-aro circle { fill: none; stroke: #3b3b44; stroke-width: .8; stroke-dasharray: .6 2.3; stroke-linecap: round; }
+
+/* cifra con brillo */
+.ed-cifra-caja { position: relative; align-self: center; }
+.ed-cifra { position: relative; margin: 0; font-weight: 800; letter-spacing: -.04em; line-height: 1;
+  text-shadow: 0 0 40px color-mix(in srgb, var(--brillo) 55%, transparent), 0 0 90px color-mix(in srgb, var(--brillo) 35%, transparent); }
+.ed-brillo { position: absolute; left: -30%; right: -30%; top: -40%; bottom: -40%; border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--brillo) 40%, transparent), transparent); }
+
+/* gráfica de barras con línea de tendencia */
+.ed-grafica { position: relative; align-self: center; }
+.ed-barra { position: absolute; bottom: 0; display: block; border-radius: 10px 10px 4px 4px; transform-origin: 50% 100%; }
+.ed-linea { position: absolute; inset: 0; }
+.ed-linea svg { overflow: visible; }
+.ed-trazo { fill: none; stroke: var(--tinta); stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; }
+
+/* etiquetas punteadas apiladas */
+.ed-etiquetas { align-self: center; display: flex; flex-direction: column; align-items: center; gap: 22px; }
+.ed-etiqueta { margin: 0; padding: 8px 30px 16px; border: 4px dotted var(--tinta); line-height: 1.05; }
+
+/* botón de cierre */
+.ed-boton { align-self: center; padding: 22px 56px; border-radius: 999px; background: var(--acento); color: var(--sobre-acento);
+  font-weight: 800; box-shadow: 0 18px 50px color-mix(in srgb, var(--acento) 40%, transparent); }
+.ed-boton .ed-en-acento { color: inherit; text-decoration: underline; }
+
+/* marca en el cierre */
+.ed-marca { align-self: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.ed-logo { width: 170px; height: 170px; border-radius: 50%; object-fit: cover; background: #fff; border: 7px solid var(--acento);
+  box-shadow: 0 16px 40px rgba(0,0,0,.14); }
+.ed-usuario { margin: 0; font-size: 44px; font-weight: 800; color: var(--acento-tinta); letter-spacing: -.01em; }
