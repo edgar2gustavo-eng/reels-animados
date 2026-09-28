@@ -63,7 +63,7 @@ window.REEL = {
 
   video: ${video ? `{ src: '${video}', inicio: 0, encuadre: '50% 50%', saltosZoom: true }` : 'null'},   // tu grabación (modo grabación)
   voz: ${voz ? `{ src: '${voz}' }` : 'null'},     // voz en off (modo texto)
-  musica: null,                    // { src: 'assets/musica.mp3', volumen: 0.12, inicio: 0 }
+  musica: null,                    // { nombre: 'energico-1' } de tu biblioteca (musica.mjs) o { src: 'assets/musica.mp3' }; se mezcla sola con la voz
   palabras: 'palabras.json',       // sale de scripts/transcribir.py
 
   subtitulos: { estilo: '${marca.subtitulos || 'pop'}' },   // pop · caja · resaltador · minimal · impacto · editorial
